@@ -49,7 +49,7 @@ public class Minesweeper extends Application
     int len = 300, wid = 200;
     Controller control = new Controller(len, wid);
     control.setup(1);
-    System.out.println("sniff");
+    System.out.println("Hello World");
     launch(args);
   }
 } 
