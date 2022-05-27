@@ -1,4 +1,5 @@
 package minesweeper;
+import javafx.scene.shape.*;
 
 public class Mine extends Tile{
   
@@ -20,8 +21,9 @@ public class Mine extends Tile{
     board.loseGame();
   }
 
-  public void draw() {
+  public Rectangle draw() {
     //draws mine object for when revealed
     revealed = true;
+    return super.draw();
   }
 }

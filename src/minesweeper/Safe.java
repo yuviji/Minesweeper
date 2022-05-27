@@ -1,4 +1,5 @@
 package minesweeper;
+import javafx.scene.shape.*;
 
 public class Safe extends Tile{
 
@@ -23,7 +24,8 @@ public class Safe extends Tile{
     if (dangers == 0) board.revealSurroundings(x, y);
   }
 
-  public void draw() {
+  public Rectangle draw() {
+      return super.draw();
     //draw safe with num of dangers or if 0, blank
   }
 }

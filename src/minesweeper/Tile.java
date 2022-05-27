@@ -10,8 +10,8 @@ public abstract class Tile{
   
   abstract void rightClick();
   abstract void leftClick();
-  public void draw() {
-    //plain empty tile
-    //overrided for revealed tiles
+  public Rectangle draw() {
+      back = new Rectangle(0, 0, 10, 10);
+      return back;
   }
 }

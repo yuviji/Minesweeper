@@ -1,4 +1,5 @@
 package minesweeper;
+import javafx.scene.shape.*;
 
 public class Flag extends Tile{
   public Flag(int x, int y, Board board){
@@ -14,7 +15,8 @@ public class Flag extends Tile{
 
   public void leftClick() {}
 
-  public void draw() {
+  public Rectangle draw() {
     //draws flag object when needed
+    return super.draw();
   }
 }
