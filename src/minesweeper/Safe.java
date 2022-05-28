@@ -88,11 +88,9 @@ public class Safe extends Tile {
                     default:
                         fill = Color.BEIGE;
                 }
-                number = new Text(x * side + side / 2, y * side + 700 - board.getHeight() + side / 2, Integer.toString(dangers));
-                number.setTextOrigin(VPos.CENTER);
+                number = new Text(x * side + side / 4, y * side + side / 1.5 + 700 - board.getHeight(), Integer.toString(dangers));
                 number.setFill(fill);
-                Font font = new Font("Impact", side * 0.75);
-                number.setFont(font);
+                number.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), side * 0.75));
                 tile.getChildren().add(number);
             }
         }

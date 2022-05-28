@@ -1,18 +1,19 @@
 package minesweeper;
 
-import javafx.scene.shape.*;
 import javafx.scene.Group;
+import javafx.scene.shape.*;
 import javafx.scene.paint.*;
+import javafx.scene.text.*;
 import java.util.*;
-import javafx.scene.input.MouseEvent;
 
 public class Board {
 
     private Tile[][] board;
     private Tile[][] copy;
     private int xSize, ySize;
-    private double tileSize, bWidth, bHeight;
+    private double tileSize, bWidth, bHeight, headerHeight;
     private Rectangle header;
+    private Text title;
 
     public Board(int xSize, int ySize, int numBombs) {
         this.xSize = xSize;
@@ -22,8 +23,12 @@ public class Board {
         tileSize = Math.min(650.0 / ySize, 900.0 / xSize);
         bWidth = tileSize * xSize;
         bHeight = tileSize * ySize;
-        header = new Rectangle(bWidth, 700.0 - bHeight);
+        headerHeight = 700.0 - bHeight;
+        header = new Rectangle(bWidth, headerHeight);
         header.setFill(Color.DARKGREEN);
+        title = new Text(bWidth / 3, headerHeight / 1.5, "MINESWEEPER");
+        title.setFill(Color.BEIGE);
+        title.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
         setMines(numBombs);
         setSafes();
         printBoard();
@@ -70,7 +75,7 @@ public class Board {
                                 || checkY < 0 || checkY >= ySize) {
                             continue;
                         }
-                        if (board[checkX][checkY] != null) {
+                        if (board[checkX][checkY] instanceof Mine) {
                             count++;
                         }
                     }
@@ -83,24 +88,33 @@ public class Board {
     public Tile clickFlag(int x, int y) {
         // remove flag from board, replacing it with what we put in copy
         // as long as copy value is not null
-        // removal returns false
         if (board[x][y] instanceof Flag) {
             board[x][y] = copy[x][y];
-            //return false;
-        } // add flag to board if the tile is not already a flag
-        // addition returns true
+        } 
+        // add flag to board if the tile is not already a flag
         else {
             copy[x][y] = board[x][y];
             board[x][y] = new Flag(x, y, this);
-            //return true;
         }
-
         return board[x][y];
     }
 
     public void loseGame() {
         //finds all bombs, check if unrevealed
         //call draw on every mine
+        //don't forget that some mines might not be on the board, might be in copy array
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
+                if (copy[i][j] instanceof Mine){
+                    board[i][j] = copy[i][j];
+                }
+                if (board[i][j] instanceof Mine){
+                    board[i][j].revealed = true;
+                    board[i][j].draw();
+                }
+            }
+        }
+        title.setText("YOU LOSE!");
     }
 
     public boolean wonwon() {
@@ -118,8 +132,8 @@ public class Board {
     }
 
     public void winGame() {
-        //animated game winning
-        System.out.println("you win");
+        //animated game winning?
+        title.setText("YOU LOSE!");
     }
 
     public void revealSurroundings(int r, int c) {
@@ -151,7 +165,7 @@ public class Board {
 
     public Group draw() {
         Group fun = new Group();
-        fun.getChildren().add(header);
+        fun.getChildren().addAll(header, title);
         for (Tile[] row : board) {
             for (Tile t : row) {
                 fun.getChildren().add(t.draw());

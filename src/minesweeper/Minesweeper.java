@@ -3,29 +3,33 @@ package minesweeper;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.geometry.Pos;
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
-import java.util.*;
-import javafx.scene.Group;
 
 public class Minesweeper extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        
+        int mode = 1, x, y;
+        
+        switch (mode){
+            case 2:
+                x = 18;
+                y = 14;
+                break;
+            case 3:
+                x = 24;
+                y = 20;
+                break;
+            default:
+                x = 10;
+                y = 8;
+        }
 
-        Scene scene;
-        int x = 10, y = 8;
-        double len = 900.0, wid = 700.0;
+//        System.currentTimeMillis(); // maintaining time at top of screen
+
         int bombs = (int) Math.ceil((0.15 * (x * y)));
         Board board = new Board(x, y, bombs);
-        Group g = new Group();
-        g.getChildren().add(board.draw());
-        scene = new Scene(g, len, wid);
+        Scene scene = new Scene(board.draw(), 900.0, 700.0);
         
         primaryStage.setTitle("Minesweeper");
         primaryStage.setScene(scene);
