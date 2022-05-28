@@ -27,27 +27,21 @@ public class Board {
         setMines(numBombs);
         setSafes();
         printBoard();
-        interactions();
     }
-    
-    private void printBoard(){
-        for (Tile[] row : board){
-            for (Tile t : row){
-                if (t instanceof Mine)
+
+    private void printBoard() {
+        for (Tile[] row : board) {
+            for (Tile t : row) {
+                if (t instanceof Mine) {
                     System.out.println("@ ");
-                else
-                    System.out.println("* ");
+                } else {
+                    System.out.println("* " + t.dangers);
+                }
             }
             System.out.println();
         }
     }
-    
-    private void interactions() {
-        header.setOnMousePressed((MouseEvent me) -> {
-            System.out.println("MOUSE DETECTED");
-        });
-    }
-    
+
     private void setMines(int bombs) {
         Random rand = new Random();
         int x, y;
@@ -64,6 +58,9 @@ public class Board {
         // scan the board and make the Safes
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
+                if (board[i][j] != null) {
+                    continue;
+                }
                 int count = 0;
                 for (int a = -1; a <= 1; a++) {
                     for (int b = -1; b <= 1; b++) {

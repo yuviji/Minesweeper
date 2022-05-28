@@ -24,7 +24,6 @@ public class Controller{
 
     // create board
     board = new Board(x, y, bombs);
-    board.setSafes();
     
     // draw board and shit too much work
   }

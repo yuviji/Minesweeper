@@ -7,9 +7,9 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class Mine extends Tile {
-    
+
     private Circle circle;
-    
+
     public Mine(int x, int y, Board board) {
         this.x = x;
         this.y = y;
@@ -49,7 +49,7 @@ public class Mine extends Tile {
 
     @Override
     public Group draw() {
-        if (revealed) {
+        if (revealed && circle == null) {
             Random rand = new Random();
             int r = rand.nextInt(255), b = rand.nextInt(255), g = rand.nextInt(255);
             Color color = Color.rgb(r, g, b);

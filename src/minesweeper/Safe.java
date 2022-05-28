@@ -1,11 +1,15 @@
 package minesweeper;
 
+import javafx.geometry.VPos;
 import javafx.scene.shape.*;
 import javafx.scene.paint.Color;
 import javafx.scene.Group;
+import javafx.scene.text.*;
 import javafx.scene.input.MouseEvent;
 
 public class Safe extends Tile {
+
+    private Text number;
 
     public Safe(int x, int y, Board board, int dangers) {
         this.x = x;
@@ -54,6 +58,43 @@ public class Safe extends Tile {
         if (revealed) {
             back.setFill(Color.BEIGE);
             back.setStroke(Color.KHAKI);
+            if (dangers > 0) {
+                Color fill;
+                switch (dangers) {
+                    case 1:
+                        fill = Color.BLUE;
+                        break;
+                    case 2:
+                        fill = Color.GREEN;
+                        break;
+                    case 3:
+                        fill = Color.RED;
+                        break;
+                    case 4:
+                        fill = Color.PURPLE;
+                        break;
+                    case 5:
+                        fill = Color.MAROON;
+                        break;
+                    case 6:
+                        fill = Color.TURQUOISE;
+                        break;
+                    case 7:
+                        fill = Color.BLACK;
+                        break;
+                    case 8:
+                        fill = Color.GRAY;
+                        break;
+                    default:
+                        fill = Color.BEIGE;
+                }
+                number = new Text(x * side + side / 2, y * side + 700 - board.getHeight() + side / 2, Integer.toString(dangers));
+                number.setTextOrigin(VPos.CENTER);
+                number.setFill(fill);
+                Font font = new Font("Impact", side * 0.75);
+                number.setFont(font);
+                tile.getChildren().add(number);
+            }
         }
         return tile;
     }
