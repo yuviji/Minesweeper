@@ -19,7 +19,7 @@ public class Safe extends Tile {
         this.side = board.getSide();
         revealed = false;
         tile = new Group();
-        back = new Rectangle(x * side, y * side + 700 - board.getHeight(), side, side);
+        back = new Rectangle(x * side, y * side + board.getHeaderHeight(), side, side);
         back.setFill(Color.LIGHTGREEN);
         back.setStrokeWidth(3);
         back.setStroke(Color.SEAGREEN);
@@ -88,7 +88,7 @@ public class Safe extends Tile {
                     default:
                         fill = Color.BEIGE;
                 }
-                number = new Text(x * side + side / 4, y * side + side / 1.5 + 700 - board.getHeight(), Integer.toString(dangers));
+                number = new Text(x * side + side / 4, y * side + side / 1.5 + board.getHeaderHeight(), Integer.toString(dangers));
                 number.setFill(fill);
                 number.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), side * 0.75));
                 tile.getChildren().add(number);

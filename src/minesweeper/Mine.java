@@ -16,7 +16,7 @@ public class Mine extends Tile {
         this.board = board;
         this.side = board.getSide();
         tile = new Group();
-        back = new Rectangle(x * side, y * side + 700 - board.getHeight(), side, side);
+        back = new Rectangle(x * side, y * side + board.getHeaderHeight(), side, side);
         back.setFill(Color.LIGHTGREEN);
         back.setStrokeWidth(3);
         back.setStroke(Color.SEAGREEN);
@@ -55,7 +55,7 @@ public class Mine extends Tile {
             Color color = Color.rgb(r, g, b);
             back.setFill(color);
             back.setStroke(color.darker());
-            circle = new Circle(x * side + side / 2, y * side + 700 - board.getHeight() + side / 2, side / 4, color.brighter());
+            circle = new Circle(x * side + side / 2, y * side + board.getHeaderHeight() + side / 2, side / 4, color.brighter());
             tile.getChildren().add(circle);
         }
         return tile;

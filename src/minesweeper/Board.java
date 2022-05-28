@@ -10,10 +10,10 @@ public class Board {
 
     private Tile[][] board;
     private Tile[][] copy;
-    private int xSize, ySize;
+    private int xSize, ySize, flagCount;
     private double tileSize, bWidth, bHeight, headerHeight;
     private Rectangle header;
-    private Text title;
+    private Text title, flags;
 
     public Board(int xSize, int ySize, int numBombs) {
         this.xSize = xSize;
@@ -29,6 +29,10 @@ public class Board {
         title = new Text(bWidth / 3, headerHeight / 1.5, "MINESWEEPER");
         title.setFill(Color.BEIGE);
         title.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
+        flagCount = numBombs;
+        flags = new Text(bWidth * 0.75, headerHeight / 1.5, Integer.toString(flagCount));
+        flags.setFill(Color.BEIGE);
+        flags.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
         setMines(numBombs);
         setSafes();
         printBoard();
@@ -90,12 +94,15 @@ public class Board {
         // as long as copy value is not null
         if (board[x][y] instanceof Flag) {
             board[x][y] = copy[x][y];
+            flagCount++;
         } 
         // add flag to board if the tile is not already a flag
         else {
             copy[x][y] = board[x][y];
             board[x][y] = new Flag(x, y, this);
+            flagCount--;
         }
+        flags.setText(Integer.toString(flagCount));
         return board[x][y];
     }
 
@@ -133,7 +140,7 @@ public class Board {
 
     public void winGame() {
         //animated game winning?
-        title.setText("YOU LOSE!");
+        title.setText("YOU WIN!");
     }
 
     public void revealSurroundings(int r, int c) {
@@ -165,7 +172,7 @@ public class Board {
 
     public Group draw() {
         Group fun = new Group();
-        fun.getChildren().addAll(header, title);
+        fun.getChildren().addAll(header, title, flags);
         for (Tile[] row : board) {
             for (Tile t : row) {
                 fun.getChildren().add(t.draw());
@@ -194,4 +201,7 @@ public class Board {
         return this.tileSize;
     }
 
+    public double getHeaderHeight(){
+        return this.headerHeight;
+    }
 }

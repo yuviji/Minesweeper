@@ -9,6 +9,8 @@ public class Minesweeper extends Application {
     @Override
     public void start(Stage primaryStage) {
         
+        
+        
         int mode = 1, x, y;
         
         switch (mode){
@@ -25,8 +27,6 @@ public class Minesweeper extends Application {
                 y = 8;
         }
 
-//        System.currentTimeMillis(); // maintaining time at top of screen
-
         int bombs = (int) Math.ceil((0.15 * (x * y)));
         Board board = new Board(x, y, bombs);
         Scene scene = new Scene(board.draw(), 900.0, 700.0);
@@ -37,7 +37,7 @@ public class Minesweeper extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        
         launch(args);
     }
 }
