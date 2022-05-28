@@ -23,7 +23,7 @@ public class Controller{
     int bombs = (int)Math.ceil((0.15 * (x * y)));
 
     // create board
-    board = new Board(x, y, length, width, bombs);
+    board = new Board(x, y, bombs);
     board.setSafes();
     
     // draw board and shit too much work

@@ -1,22 +1,31 @@
 package minesweeper;
+
 import javafx.scene.shape.*;
+import javafx.scene.Group;
 
-public class Flag extends Tile{
-  public Flag(int x, int y, Board board){
-    this.x = x;
-    this.y = y;
-    this.board = board;
-  }
+public class Flag extends Tile {
 
-  public void rightClick(){  
-    board.clickFlag(x, y);
-    super.draw();
-  }
+    public Flag(int x, int y, Board board) {
+        this.x = x;
+        this.y = y;
+        this.board = board;
+        revealed = false;
+    }
 
-  public void leftClick() {}
+    @Override
+    public void rightClick() {
+        board.clickFlag(x, y);
+        revealed = !revealed;
+        draw();
+    }
 
-  public Rectangle draw() {
-    //draws flag object when needed
-    return super.draw();
-  }
+    @Override
+    public void leftClick() {
+    }
+
+    @Override
+    public Group draw() {
+        return new Group();
+    }
 }
+    

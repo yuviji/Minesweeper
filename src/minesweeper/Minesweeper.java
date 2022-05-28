@@ -13,26 +13,27 @@ import javafx.event.ActionEvent;
 import java.util.*;
 import javafx.scene.Group;
 
-public class Minesweeper extends Application 
-{ 
-  
-  @Override
-  public void start(Stage primaryStage) {
-    
-    Scene scene;
-    Board board = new Board(10, 8, 300, 200, 12);
-    Safe safe = new Safe(3, 3, board, 3);
-    Group g = new Group();
-    g.getChildren().add(safe.draw() );
-    scene = new Scene(g, 300, 200);
-    
-    primaryStage.setTitle("A Simple Scene!");
-    primaryStage.setScene(scene);
-    primaryStage.show();
-  }
-    
-  public static void main(String[] args) {
-    System.out.println("Hello World");
-    launch(args);
-  }
-} 
+public class Minesweeper extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        Scene scene;
+        int x = 10, y = 8;
+        double len = 900.0, wid = 700.0;
+        int bombs = (int) Math.ceil((0.15 * (x * y)));
+        Board board = new Board(x, y, bombs);
+        Group g = new Group();
+        g.getChildren().add(board.draw());
+        scene = new Scene(g, len, wid);
+        
+        primaryStage.setTitle("Minesweeper");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+        launch(args);
+    }
+}

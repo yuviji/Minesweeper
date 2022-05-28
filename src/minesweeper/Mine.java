@@ -1,29 +1,64 @@
 package minesweeper;
+
 import javafx.scene.shape.*;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import java.util.*;
 
-public class Mine extends Tile{
-  
-  
-  public Mine(int x, int y, Board board){
-    this.x = x;
-    this.y = y;
-    this.board = board;
-    this.pxW = (board.getWpx() - 50.0) / board.getX();
-    this.pxL = (board.getLpx() - 50.0) / board.getY();
-  }
+public class Mine extends Tile {
+    
+    private Circle circle;
+    
+    public Mine(int x, int y, Board board) {
+        this.x = x;
+        this.y = y;
+        this.board = board;
+        this.side = board.getSide();
+        tile = new Group();
+        back = new Rectangle(x * side, y * side + 700 - board.getHeight(), side, side);
+        back.setFill(Color.LIGHTGREEN);
+        back.setStrokeWidth(3);
+        back.setStroke(Color.SEAGREEN);
+        tile.getChildren().add(back);
+        interactions();
+    }
 
-  public void rightClick() {
-    board.clickFlag(x, y).draw();
-  }
+    private void interactions() {
+        back.setOnMousePressed((MouseEvent me) -> {
+            System.out.println("MOUSE DETECTED");
+            if (me.isPrimaryButtonDown()) {
+                leftClick();
+            } else if (me.isSecondaryButtonDown()) {
+                rightClick();
+            }
+        });
+    }
 
-  public void leftClick() {
-    draw();
-    board.loseGame();
-  }
+    @Override
+    public void rightClick() {
+        board.clickFlag(x, y).draw();
+    }
 
-  public Rectangle draw() {
-    //draws mine object for when revealed
-    revealed = true;
-    return super.draw();
-  }
+    @Override
+    public void leftClick() {
+        revealed = true;
+        draw();
+        board.loseGame();
+    }
+
+    @Override
+    public Group draw() {
+        if (revealed) {
+            Random rand = new Random();
+            int r = rand.nextInt(255), b = rand.nextInt(255), g = rand.nextInt(255);
+            Color color = Color.rgb(r, g, b);
+            back.setFill(color);
+            back.setStroke(color.darker());
+            circle = new Circle(x * side + side / 2, y * side + 700 - board.getHeight() + side / 2, side / 4, color.brighter());
+            tile.getChildren().add(circle);
+        }
+        return tile;
+    }
+
 }
