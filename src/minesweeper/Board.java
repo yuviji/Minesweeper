@@ -33,7 +33,7 @@ public class Board {
         flagCount = numBombs;
         flags = new Text(bWidth * 0.75, headerHeight / 1.5, Integer.toString(flagCount));
         flags.setFill(Color.BEIGE);
-        flags.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
+        flags.setFont(Font.loadFont(getClass().getResource("Fonts/PressStart2P-Regular.ttf").toString(), headerHeight * 0.4));
         setMines(numBombs);
         setSafes();
     }
