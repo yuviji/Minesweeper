@@ -10,8 +10,9 @@ public class Board {
 
     private Tile[][] board;
     private Tile[][] copy;
-    private int xSize, ySize, flagCount;
-    private double tileSize, bWidth, bHeight, headerHeight;
+    private final int xSize, ySize;
+    private int flagCount;
+    private final double tileSize, bWidth, bHeight, headerHeight;
     private Rectangle header;
     private Text title, flags;
 
@@ -35,20 +36,6 @@ public class Board {
         flags.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
         setMines(numBombs);
         setSafes();
-        printBoard();
-    }
-
-    private void printBoard() {
-        for (Tile[] row : board) {
-            for (Tile t : row) {
-                if (t instanceof Mine) {
-                    System.out.println("@ ");
-                } else {
-                    System.out.println("* " + t.dangers);
-                }
-            }
-            System.out.println();
-        }
     }
 
     private void setMines(int bombs) {
@@ -95,8 +82,7 @@ public class Board {
         if (board[x][y] instanceof Flag) {
             board[x][y] = copy[x][y];
             flagCount++;
-        } 
-        // add flag to board if the tile is not already a flag
+        } // add flag to board if the tile is not already a flag
         else {
             copy[x][y] = board[x][y];
             board[x][y] = new Flag(x, y, this);
@@ -112,10 +98,10 @@ public class Board {
         //don't forget that some mines might not be on the board, might be in copy array
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
-                if (copy[i][j] instanceof Mine){
+                if (copy[i][j] instanceof Mine) {
                     board[i][j] = copy[i][j];
                 }
-                if (board[i][j] instanceof Mine){
+                if (board[i][j] instanceof Mine) {
                     board[i][j].revealed = true;
                     board[i][j].draw();
                 }
@@ -201,7 +187,7 @@ public class Board {
         return this.tileSize;
     }
 
-    public double getHeaderHeight(){
+    public double getHeaderHeight() {
         return this.headerHeight;
     }
 }

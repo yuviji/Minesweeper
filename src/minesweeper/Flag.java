@@ -8,7 +8,7 @@ public class Flag extends Tile {
 
     private Polygon triangle;
     private Line pole;
-    
+
     public Flag(int x, int y, Board board) {
         this.x = x;
         this.y = y;
@@ -32,4 +32,3 @@ public class Flag extends Tile {
         return new Group();
     }
 }
-    

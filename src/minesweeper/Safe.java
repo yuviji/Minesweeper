@@ -1,6 +1,5 @@
 package minesweeper;
 
-import javafx.geometry.VPos;
 import javafx.scene.shape.*;
 import javafx.scene.paint.Color;
 import javafx.scene.Group;
@@ -29,7 +28,6 @@ public class Safe extends Tile {
 
     private void interactions() {
         back.setOnMousePressed((MouseEvent me) -> {
-            System.out.println("MOUSE DETECTED");
             if (me.isPrimaryButtonDown()) {
                 leftClick();
             } else if (me.isSecondaryButtonDown()) {

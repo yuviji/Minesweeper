@@ -26,7 +26,6 @@ public class Mine extends Tile {
 
     private void interactions() {
         back.setOnMousePressed((MouseEvent me) -> {
-            System.out.println("MOUSE DETECTED");
             if (me.isPrimaryButtonDown()) {
                 leftClick();
             } else if (me.isSecondaryButtonDown()) {
