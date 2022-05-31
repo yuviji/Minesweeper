@@ -88,6 +88,7 @@ public class Board {
             board[x][y] = new Flag(x, y, this);
             flagCount--;
         }
+        board[x][y].revealed = !board[x][y].revealed;
         flags.setText(Integer.toString(flagCount));
         return board[x][y];
     }
@@ -166,6 +167,8 @@ public class Board {
         }
         return fun;
     }
+    
+    public Group drawFlag()
 
     public int getX() {
         return this.xSize;
