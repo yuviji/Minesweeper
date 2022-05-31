@@ -2,6 +2,7 @@ package minesweeper;
 
 import javafx.scene.shape.*;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class Flag extends Tile {
@@ -13,14 +14,29 @@ public class Flag extends Tile {
         this.x = x;
         this.y = y;
         this.board = board;
-        revealed = false;
+        revealed = true;
+        tile = new Group();
+        back = new Rectangle(x * side, y * side + board.getHeaderHeight(), side, side);
+        back.setFill(Color.LIGHTGREEN);
+        back.setStrokeWidth(3);
+        back.setStroke(Color.SEAGREEN);
+        tile.getChildren().add(back);
+        interactions();
+    }
+
+    private void interactions() {
+        back.setOnMousePressed((MouseEvent me) -> {
+            if (me.isPrimaryButtonDown()) {
+                leftClick();
+            } else if (me.isSecondaryButtonDown()) {
+                rightClick();
+            }
+        });
     }
 
     @Override
     public void rightClick() {
         board.clickFlag(x, y);
-        revealed = !revealed;
-        draw();
     }
 
     @Override
@@ -29,6 +45,14 @@ public class Flag extends Tile {
 
     @Override
     public Group draw() {
-        return new Group();
+        pole = new Line(x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.15 * side, x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.85 * side);
+        pole.setStrokeWidth(0.10 * side);
+        pole.setFill(Color.RED);
+        triangle.getPoints().addAll(new Double[]{x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.15 * side,
+        x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.45 * side,
+        x * side + 0.8 * side, y * side + board.getHeaderHeight() + 0.3 * side});
+        triangle.setFill(Color.RED);
+        tile.getChildren().addAll(pole, triangle);
+        return tile;
     }
 }

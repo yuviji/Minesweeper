@@ -13,6 +13,7 @@ public class Board {
     private final int xSize, ySize;
     private int flagCount;
     private final double tileSize, bWidth, bHeight, headerHeight;
+    private Group fun;
     private Rectangle header;
     private Text title, flags;
 
@@ -25,6 +26,7 @@ public class Board {
         bWidth = tileSize * xSize;
         bHeight = tileSize * ySize;
         headerHeight = 700.0 - bHeight;
+        fun = new Group();
         header = new Rectangle(bWidth, headerHeight);
         header.setFill(Color.DARKGREEN);
         title = new Text(bWidth / 3, headerHeight / 1.5, "MINESWEEPER");
@@ -79,6 +81,7 @@ public class Board {
     public Tile clickFlag(int x, int y) {
         // remove flag from board, replacing it with what we put in copy
         // as long as copy value is not null
+        fun.getChildren().remove(board[x][y].draw());
         if (board[x][y] instanceof Flag) {
             board[x][y] = copy[x][y];
             flagCount++;
@@ -88,7 +91,7 @@ public class Board {
             board[x][y] = new Flag(x, y, this);
             flagCount--;
         }
-        board[x][y].revealed = !board[x][y].revealed;
+        fun.getChildren().add(board[x][y].draw());
         flags.setText(Integer.toString(flagCount));
         return board[x][y];
     }
@@ -158,7 +161,6 @@ public class Board {
     }
 
     public Group draw() {
-        Group fun = new Group();
         fun.getChildren().addAll(header, title, flags);
         for (Tile[] row : board) {
             for (Tile t : row) {
@@ -167,8 +169,6 @@ public class Board {
         }
         return fun;
     }
-    
-    public Group drawFlag()
 
     public int getX() {
         return this.xSize;

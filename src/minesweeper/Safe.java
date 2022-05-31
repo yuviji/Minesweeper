@@ -38,7 +38,7 @@ public class Safe extends Tile {
 
     @Override
     public void rightClick() {
-        board.clickFlag(x, y).draw();
+        board.clickFlag(x, y);
     }
 
     @Override
