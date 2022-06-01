@@ -14,6 +14,7 @@ public class Flag extends Tile {
         this.x = x;
         this.y = y;
         this.board = board;
+        this.side = board.getSide();
         revealed = true;
         tile = new Group();
         back = new Rectangle(x * side, y * side + board.getHeaderHeight(), side, side);
@@ -45,11 +46,13 @@ public class Flag extends Tile {
 
     @Override
     public Group draw() {
+        triangle = new Polygon();
         pole = new Line(x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.15 * side, x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.85 * side);
         pole.setStrokeWidth(0.10 * side);
         pole.setFill(Color.RED);
-        triangle.getPoints().addAll(new Double[]{x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.15 * side,
-        x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.45 * side,
+        triangle.getPoints().addAll(new Double[]{
+            x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.1 * side,
+        x * side + 0.25 * side, y * side + board.getHeaderHeight() + 0.5 * side,
         x * side + 0.8 * side, y * side + board.getHeaderHeight() + 0.3 * side});
         triangle.setFill(Color.RED);
         tile.getChildren().addAll(pole, triangle);

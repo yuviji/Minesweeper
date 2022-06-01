@@ -5,6 +5,7 @@ import javafx.scene.shape.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import java.util.*;
+import javafx.stage.Stage;
 
 public class Board {
 
@@ -16,8 +17,10 @@ public class Board {
     private Group fun;
     private Rectangle header;
     private Text title, flags;
+    private Minesweeper minesweeper;
 
-    public Board(int xSize, int ySize, int numBombs) {
+    public Board(int xSize, int ySize, int numBombs, Minesweeper minesweeper) {
+        this.minesweeper = minesweeper;
         this.xSize = xSize;
         this.ySize = ySize;
         board = new Tile[xSize][ySize];
@@ -112,6 +115,7 @@ public class Board {
             }
         }
         title.setText("YOU LOSE!");
+        minesweeper.end(minesweeper.stage, false);
     }
 
     public boolean wonwon() {
@@ -131,6 +135,7 @@ public class Board {
     public void winGame() {
         //animated game winning?
         title.setText("YOU WIN!");
+        minesweeper.end(minesweeper.stage, false);
     }
 
     public void revealSurroundings(int r, int c) {
