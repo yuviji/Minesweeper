@@ -32,25 +32,15 @@ public class Board {
         bHeight = tileSize * ySize;
         headerHeight = 700.0 - bHeight;
         fun = new Group();
-        header = new Rectangle(bWidth, headerHeight);
-        header.setFill(Color.DARKGREEN);
-        title = new Text(bWidth / 3, headerHeight / 1.5, "MINESWEEPER");
-        title.setFill(Color.BEIGE);
-        title.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
-        flagCount = numBombs;
-        flags = new Text(bWidth * 0.75, headerHeight / 1.5, Integer.toString(flagCount));
-        flags.setFill(Color.BEIGE);
-        flags.setFont(Font.loadFont(getClass().getResource("Fonts/PressStart2P-Regular.ttf").toString(), headerHeight * 0.4));
         setBoard(0, 0);
-        copy = new Tile[xSize][ySize];
     }
 
     public void setBoard(int x, int y) {
         board = new Tile[xSize][ySize];
+        copy = new Tile[xSize][ySize];
         ArrayList<Pair<Integer, Integer>> mines = new ArrayList<>();
         ArrayList<Pair<Integer, Integer>> safes = new ArrayList<>();
         Random rand = new Random();
-        System.out.println("Start: " + x + ", " + y);
 
         // make first set of safes, surrounding where first click was
         safes.add(new Pair(x, y));
@@ -97,13 +87,6 @@ public class Board {
             }
             board[a][b] = new Safe(a, b, this, dangerCount(a, b));
         }
-        for (int j = 0; j < ySize; j++) {
-            for (int i = 0; i < xSize; i++) {
-                System.out.print(board[i][j].dangers + " ");
-            }
-            System.out.println("");
-        }
-        System.out.println("");
         if (set) {
             fun.getChildren().clear();
             draw();
@@ -213,11 +196,16 @@ public class Board {
         }
     }
 
-    public void addTiles() {
-
-    }
-
     public Group draw() {
+        header = new Rectangle(bWidth, headerHeight);
+        header.setFill(Color.DARKGREEN);
+        title = new Text(bWidth / 3, headerHeight / 1.5, "MINESWEEPER");
+        title.setFill(Color.BEIGE);
+        title.setFont(Font.loadFont(getClass().getResource("Fonts/ARCADECLASSIC.TTF").toString(), headerHeight * 0.75));
+        flagCount = numBombs;
+        flags = new Text(bWidth * 0.75, headerHeight / 1.5, Integer.toString(flagCount));
+        flags.setFill(Color.BEIGE);
+        flags.setFont(Font.loadFont(getClass().getResource("Fonts/PressStart2P-Regular.ttf").toString(), headerHeight * 0.4));
         fun.getChildren().addAll(header, title, flags);
         for (Tile[] row : board) {
             for (Tile t : row) {
@@ -225,22 +213,6 @@ public class Board {
             }
         }
         return fun;
-    }
-
-    public int getX() {
-        return this.xSize;
-    }
-
-    public int getY() {
-        return this.ySize;
-    }
-
-    public double getHeight() {
-        return this.bHeight;
-    }
-
-    public double getWidth() {
-        return this.bWidth;
     }
 
     public double getSide() {
