@@ -4,8 +4,8 @@ import javafx.scene.Group;
 import javafx.scene.shape.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
+import javafx.util.Pair;
 import java.util.*;
-import javafx.stage.Stage;
 
 public class Board {
 
@@ -13,18 +13,20 @@ public class Board {
     private Tile[][] copy;
     private final int xSize, ySize;
     private int flagCount;
+    private int numBombs;
     private final double tileSize, bWidth, bHeight, headerHeight;
     private Group fun;
     private Rectangle header;
     private Text title, flags;
     private Minesweeper minesweeper;
+    protected boolean set;
 
     public Board(int xSize, int ySize, int numBombs, Minesweeper minesweeper) {
         this.minesweeper = minesweeper;
         this.xSize = xSize;
         this.ySize = ySize;
-        board = new Tile[xSize][ySize];
-        copy = new Tile[xSize][ySize];
+        this.numBombs = numBombs;
+        set = false;
         tileSize = Math.min(650.0 / ySize, 900.0 / xSize);
         bWidth = tileSize * xSize;
         bHeight = tileSize * ySize;
@@ -39,46 +41,92 @@ public class Board {
         flags = new Text(bWidth * 0.75, headerHeight / 1.5, Integer.toString(flagCount));
         flags.setFill(Color.BEIGE);
         flags.setFont(Font.loadFont(getClass().getResource("Fonts/PressStart2P-Regular.ttf").toString(), headerHeight * 0.4));
-        setMines(numBombs);
-        setSafes();
+        setBoard(0, 0);
+        copy = new Tile[xSize][ySize];
     }
 
-    private void setMines(int bombs) {
+    public void setBoard(int x, int y) {
+        board = new Tile[xSize][ySize];
+        ArrayList<Pair<Integer, Integer>> mines = new ArrayList<>();
+        ArrayList<Pair<Integer, Integer>> safes = new ArrayList<>();
         Random rand = new Random();
-        int x, y;
-        for (int i = 0; i < bombs; i++) {
-            do {
-                x = rand.nextInt(xSize);
-                y = rand.nextInt(ySize);
-            } while (board[x][y] != null);
-            board[x][y] = new Mine(x, y, this);
-        }
-    }
+        System.out.println("Start: " + x + ", " + y);
 
-    private void setSafes() {
-        // scan the board and make the Safes
-        for (int i = 0; i < xSize; i++) {
-            for (int j = 0; j < ySize; j++) {
-                if (board[i][j] != null) {
+        // make first set of safes, surrounding where first click was
+        safes.add(new Pair(x, y));
+        board[x][y] = new Safe(x, y, this, 0);
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int a = x + i, b = y + j;
+                if ((a == x && b == y)
+                        || a < 0 || a >= xSize
+                        || b < 0 || b >= ySize) {
                     continue;
                 }
-                int count = 0;
-                for (int a = -1; a <= 1; a++) {
-                    for (int b = -1; b <= 1; b++) {
-                        int checkX = i + a, checkY = j + b;
-                        if ((checkX == i && checkY == j)
-                                || checkX < 0 || checkX >= xSize
-                                || checkY < 0 || checkY >= ySize) {
-                            continue;
-                        }
-                        if (board[checkX][checkY] instanceof Mine) {
-                            count++;
-                        }
-                    }
-                }
-                board[i][j] = new Safe(i, j, this, count);
+                safes.add(new Pair(a, b));
             }
         }
+
+        while (mines.size() < numBombs) {
+            // create mines on random coordinates excluding safes
+            int a = rand.nextInt(xSize), b = rand.nextInt(ySize);
+            Pair temp = new Pair(a, b);
+            if (!safes.contains(temp) && !mines.contains(temp)) {
+                mines.add(temp);
+            }
+        }
+        // fill remaining spaces with safes
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
+                Pair temp = new Pair(i, j);
+                if (!mines.contains(temp) && !safes.contains(temp)) {
+                    safes.add(temp);
+                }
+            }
+        }
+        // add mines to board
+        for (Pair<Integer, Integer> p : mines) {
+            int a = p.getKey(), b = p.getValue();
+            board[a][b] = new Mine(a, b, this);
+        }
+        // add safes to board
+        for (Pair<Integer, Integer> p : safes) {
+            int a = p.getKey(), b = p.getValue();
+            if (a == x && b == y) {
+                continue;
+            }
+            board[a][b] = new Safe(a, b, this, dangerCount(a, b));
+        }
+        for (int j = 0; j < ySize; j++) {
+            for (int i = 0; i < xSize; i++) {
+                System.out.print(board[i][j].dangers + " ");
+            }
+            System.out.println("");
+        }
+        System.out.println("");
+        if (set) {
+            fun.getChildren().clear();
+            draw();
+            board[x][y].leftClick();
+        }
+    }
+
+    private int dangerCount(int x, int y) {
+        int count = 0;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int a = x + i, b = y + j;
+                if ((a == x && b == y)
+                        || a < 0 || a >= xSize
+                        || b < 0 || b >= ySize) {
+                    continue;
+                }
+                if (board[a][b] instanceof Mine) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public Tile clickFlag(int x, int y) {
@@ -99,6 +147,20 @@ public class Board {
         return board[x][y];
     }
 
+    public boolean isWon() {
+        //returns false if game has not been won
+        //calls winGame and returns true if game has been won
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
+                if (board[i][j] instanceof Safe && !board[i][j].revealed) {
+                    return false;
+                }
+            }
+        }
+        this.winGame();
+        return true;
+    }
+
     public void loseGame() {
         //finds all bombs, check if unrevealed
         //call draw on every mine
@@ -115,27 +177,13 @@ public class Board {
             }
         }
         title.setText("YOU LOSE!");
-        minesweeper.end(minesweeper.stage, false);
-    }
-
-    public boolean wonwon() {
-        //returns false if game has not been won
-        //calls winGame and returns true if game has been won
-        for (int i = 0; i < xSize; i++) {
-            for (int j = 0; j < ySize; j++) {
-                if (board[i][j] instanceof Safe && !board[i][j].revealed) {
-                    return false;
-                }
-            }
-        }
-        this.winGame();
-        return true;
+        minesweeper.end(false);
     }
 
     public void winGame() {
-        //animated game winning?
+        // won
         title.setText("YOU WIN!");
-        minesweeper.end(minesweeper.stage, false);
+        minesweeper.end(true);
     }
 
     public void revealSurroundings(int r, int c) {
@@ -163,6 +211,10 @@ public class Board {
         for (int i = 0; i < x.size(); i++) {
             revealSurroundings(x.get(i), y.get(i));
         }
+    }
+
+    public void addTiles() {
+
     }
 
     public Group draw() {
@@ -198,4 +250,5 @@ public class Board {
     public double getHeaderHeight() {
         return this.headerHeight;
     }
+
 }

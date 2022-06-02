@@ -27,9 +27,15 @@ public class Safe extends Tile {
     }
 
     private void interactions() {
+        // click detected
         back.setOnMousePressed((MouseEvent me) -> {
             if (me.isPrimaryButtonDown()) {
-                leftClick();
+                if (!board.set) {
+                    board.set = true;
+                    board.setBoard(x, y);
+                } else {
+                    leftClick();
+                }
             } else if (me.isSecondaryButtonDown()) {
                 rightClick();
             }
@@ -38,14 +44,18 @@ public class Safe extends Tile {
 
     @Override
     public void rightClick() {
-        board.clickFlag(x, y);
+        // flag tiles that have not been revealed
+        if (!revealed) {
+            board.clickFlag(x, y);
+        }
     }
 
     @Override
     public void leftClick() {
+        // reveal tile
         revealed = true;
         draw();
-        board.wonwon();
+        board.isWon();
         if (dangers == 0) {
             board.revealSurroundings(x, y);
         }
@@ -54,6 +64,7 @@ public class Safe extends Tile {
     @Override
     public Group draw() {
         if (revealed) {
+            // draw with number revealed
             back.setFill(Color.BEIGE);
             back.setStroke(Color.KHAKI);
             if (dangers > 0) {
