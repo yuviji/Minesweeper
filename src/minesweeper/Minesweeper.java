@@ -73,7 +73,8 @@ public class Minesweeper extends Application {
     public void end(boolean win) {
         // text stating the state (win or lose)
         // button play again -> set scene to opening
-
+        Stage pop = new Stage();
+        pop.setTitle("Game Over!");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setMinSize(900.0, 700.0);
@@ -98,14 +99,18 @@ public class Minesweeper extends Application {
         quit.setBackground(new Background(new BackgroundFill(Color.BEIGE, new CornerRadii(50.0), new Insets(0.0))));
         playAgain.setTextFill(Color.GREEN);
         quit.setTextFill(Color.GREEN);
-        playAgain.setOnAction((ActionEvent e) -> stage.setScene(opening()));
+        playAgain.setOnAction((ActionEvent e) -> {
+            stage.setScene(opening());
+            pop.close();
+        });
         quit.setOnAction((ActionEvent e) -> Platform.exit());
         choice.getChildren().addAll(playAgain, quit);
         grid.add(choice, 1, 2);
 
         Scene end = new Scene(grid, 900.0, 700.0);
         end.setFill(Color.GREEN);
-        stage.setScene(end);
+        pop.setScene(end);
+        pop.show();
     }
 
     public static void main(String[] args) {
